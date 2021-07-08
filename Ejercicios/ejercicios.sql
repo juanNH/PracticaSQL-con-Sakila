@@ -373,58 +373,131 @@ SELECT last_name, COUNT(*) FROM sakila.actor GROUP BY last_name;
 
 SELECT c.customer_id, c.first_name, c.last_name,SUM(p.amount) FROM sakila.payment p INNER JOIN sakila.customer c ON (c.customer_id = p.customer_id) GROUP BY c.customer_id, c.first_name, c.last_name;
 /* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
+    Ej48
+    Consulta la tabla rental de la base de datos sakila.
+    Realiza un MAX de  la columna rental_date de cada customer_id.
 */
 
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
+SELECT customer_id ,MAX(rental_date) FROM sakila.rental GROUP BY customer_id;
+
+/*HAVING
+    Ej49
+    Seleccionar cuales valores de la columna last_name de la tabla actor se repiten mas de 3 veces
 */
 
+SELECT last_name, count(*) FROM sakila.actor GROUP BY last_name HAVING COUNT(*) > 3;
+
 /* 
-    Ej46
+    Ej50
+    Seleccionar las tuplas de customer_id, first_name, last_name y el amount total de la tabla payment con un INNER JOIN con customer.
+    Sus customer_id deben coincidir, deben mostrarse solo los amount menores a 80 ordenados de mayor a menor. 
 */
+
+SELECT c.customer_id, c.first_name, c.last_name, SUM(p.amount) FROM sakila.payment p INNER JOIN sakila.customer c ON (c.customer_id = p.customer_id) GROUP BY c.customer_id, c.first_name, c.last_name HAVING SUM(p.amount) < 80 ORDER BY SUM(p.amount)  DESC ;
+
+/* 
+    Ej51
+    Realiza un COUNT de  last_name.
+    Mostrar cuando el COUNT sea mayor de 2.
+*/
+
+SELECT last_name, COUNT(*) FROM sakila.actor GROUP BY last_name HAVING COUNT(*) > 3;
+
+/*CHAR_LENGTH 
+    Ej52
+    Seleccionar las tuplas de la tabla name y la longitud del valor de la tupla como LongitudCadena de la tabla category.
+    Seleccionar las tuplas de la tabla city y la longitud del valor de la tupla como LongitudCadena de la tabla city.
+*/
+
+SELECT name, CHAR_LENGTH(name) AS LongitudCadena FROM sakila.category;
+
+SELECT city, CHAR_LENGTH(city) AS LongitudCadena FROM sakila.city;
+
+/*CONCAT
+    Ej53
+    Seleccionar en una columna first_name y last_name con un espacio de separacion, como NombreCompleto y customer_id de la tabla customer.
+*/
+
+SELECT customer_id, CONCAT(first_name,' ',last_name) AS NombreCompleto FROM sakila.customer;
+
+/* 
+    Ej54
+    Seleccionar dentro de una columna separadas por un - las columnas film_id, title, description, release_year, todo como Pelicula de la tabla film.
+*/
+
+SELECT CONCAT_WS('-',film_id ,title,description,release_year) AS Pelicula FROM sakila.film;
+
+/* 
+    Ej55
+    Seleccionar las tuplas y el redondeado de la columna amount como ValorRedondeado de la tabla payment.
+*/
+
+SELECT *, ROUND(amount,0) AS ValorRedondeado FROM sakila.payment;
+
+/* 
+    Ej56
+    Seleccionar todas las tuplas con una columna de NombreCompleto con first_name y last_name en minuscula de la tabla actor.
+*/
+
+SELECT *, LCASE(CONCAT(first_name,' ',last_name)) AS NombreCompleto FROM sakila.actor;
+
+/* 
+    Ej57
+    Usa la función CHAR_LENGTH() en la tabla customer y calcula la longitud de la columna email.
+*/
+
+SELECT customer_id,CHAR_LENGTH(email) AS logitud_email FROM sakila.customer;
+
+/* 
+    Ej58
+    Usa la función CONCAT() en la tabla customer y has un concatenado entre first_name, last_name y email.
+*/
+
+SELECT customer_id, CONCAT_WS('-',first_name ,last_name, email) AS NombreCompleto_email FROM sakila.customer;
+
+/* 
+    Ej59
+    Usa la función CONCAT_WS() en la tabla film y has un concatenado de todas las columnas.
+*/
+
+SELECT CONCAT_WS('--',film_id, title, description, release_year, language_id, original_language_id, rental_duration, rental_rate, length, replacement_cost, rating, special_features, last_update) FROM sakila.film;
+
+/* 
+    Ej60
+    Consulta la tabla payment y has un group by por customer_id para el promedio de amount, después usa la función ROUND() para redondear a cero decimales el promedio.
+*/
+
+SELECT customer_id, ROUND(AVG(amount)) AS PromedioGastado FROM sakila.payment GROUP BY customer_id;
+
+
+/* 
+    Ej61
+    Usa la función UCASE() en la tabla city y convierte la columna city en mayúsculas.
+*/
+
+SELECT *, UCASE(city) FROM sakila.city;
+
+/* 
+    Ej62
+    Seleccionar address_id, address, address2 y si en address2 es null, en una nueva columna llamada comentario hay que seleccionar si es sin direccion o con direccion de todas las tuplas de la tabla address. 
+*/
+
+SELECT address_id,address, address2, CASE WHEN address2 IS NULL THEN 'Sin direccion 2' ELSE 'Con direccion' END AS Comentario FROM sakila.address;
+
+/* 
+    Ej63
+    Seleccionar payment_id, amount y crear una columna comentario que si amount es menor a 1 sea Precio minimo, si esta entre 1 y 3 sea Precio intermedio y si es mayor a 3 sea Precio alto de la tabla payment.
+*/
+
+SELECT payment_id, amount, CASE WHEN amount< 1 THEN 'Precio minimo' WHEN amount BETWEEN 1 AND 3 THEN 'Precio intermedio' ELSE 'Precio alto' END AS Comentario FROM sakila.payment;
+
+/* 
+    Ej64
+    Usa la función CASE en la tabla film y calcula 3 casos, si rental_rate es menor que 1 ingresa "Pelicula Mala", si la calificacion esta dentro de 1 y 3 que muestre "Pelicula Buena", si es mayor que muestre "Pelicula Excelente".
+*/
+
+
+
 /* 
     Ej46
 */
