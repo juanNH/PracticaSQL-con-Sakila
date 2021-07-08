@@ -307,29 +307,170 @@ SELECT r.rental_id, s.first_name FROM sakila.rental r INNER JOIN sakila.staff s 
 
 /*COUNT, AVG, SUM, MAX, MIN
     Ej39
+    Consultar cuanto es el total de todas las tuplas de amount
+*/
+
+SELECT SUM(AMOUNT) FROM sakila.payment;
+
+/* 
+    Ej40
+    Sumar las columnas de la tabla inventory
+*/
+
+SELECT inventory_id + film_id + store_id FROM sakila.inventory;
+
+/* 
+    Ej41
+    Mostrar cuantos registros hay en la tabla address
+*/
+
+SELECT COUNT(*) FROM sakila.address;
+
+/* 
+    Ej42
+    Mostrar cuanto es el valor promedio de la columna amount de la tabla payment
+*/
+
+SELECT AVG(amount) FROM sakila.payment;
+
+/* 
+    Ej43
+    Mostrar el valor maximo y minimo de la columna length de la tabla film
+*/
+
+SELECT MAX(length) FROM sakila.film;
+
+SELECT MIN(length) FROM sakila.film;
+
+/* 
+    Ej44
+    Consulta la tabla rental de la base de datos sakila.
+    Realiza un COUNT de  la columna rental_id.
+*/
+
+SELECT COUNT(rental_id) FROM sakila.rental;
+
+/* 
+    Ej45
+    Consulta la tabla payment de la base de datos sakila.
+    Realiza un MAX de  la columna amount.
+*/
+
+SELECT MAX(amount) FROM sakila.payment;
+
+/*GROUP BY
+    Ej46
+    Seleccionar los datos de la columna last_name de la tabla actor y cuantas veces se repiten.
+*/
+
+SELECT last_name, COUNT(*) FROM sakila.actor GROUP BY last_name;
+
+/* 
+    Ej47
+    Seleccionar de la tabla payment con un inner join de la tabla customer, cuanto gasto cada cliente (amount).
+    Mostrar customer_id, first_name y last_name de la tabla customer.
+*/
+
+SELECT c.customer_id, c.first_name, c.last_name,SUM(p.amount) FROM sakila.payment p INNER JOIN sakila.customer c ON (c.customer_id = p.customer_id) GROUP BY c.customer_id, c.first_name, c.last_name;
+/* 
+    Ej46
 */
 /* 
-    Ej23
+    Ej46
 */
 /* 
-    Ej23
+    Ej46
+*/
+/* 
+    Ej46
 */
 
 /* 
-    Ej23
-*//* 
-    Ej23
+    Ej46
 */
 /* 
-    Ej23
+    Ej46
 */
 /* 
-    Ej23
+    Ej46
 */
 /* 
-    Ej23
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
 */
 
 /* 
-    Ej23
+    Ej46
 */
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+/* 
+    Ej46
+*/
+
