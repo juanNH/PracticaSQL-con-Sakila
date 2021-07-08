@@ -243,30 +243,70 @@ SELECT * FROM sakila.actor WHERE first_name LIKE 'C%N' AND last_name LIKE 'G%';
 
 SELECT * FROM sakila.film WHERE release_year = 2006 AND title LIKE 'ALI%';
 
-/* 
-    Ej31
-*/
-/* 
-    Ej23
+/* INNER JOIN, LEFT JOIN, RIGHT JOIN
+    Ej32
+    Seleccionar todas las tuplas de la tabla film que tengan el mismo language_id de la tabla language.
+    Pedir solo de la tabla  film title, description, release_year y de la language solo name
 */
 
+SELECT f.title, f.description, f.release_year, l.name FROM sakila.film f INNER JOIN sakila.language l ON (f.language_id = l.language_id);
+
 /* 
-    Ej23
+    Ej33
+    Seleccionar todas las tuplas de la tabla address que tengan el mismo city_id que la tabla city.
+    Pedir de address solo address como Direccion y de city pedir city como Ciudad. 
 */
+
+SELECT a.address AS Direccion, c.city AS Ciudad FROM sakila.address a INNER JOIN sakila.city c ON (a.city_id = c.city_id);
+
 /* 
-    Ej23
+    Ej34
+    USAR RIGTH JOIN
+    Seleccionar todas las tuplas de la tabla actor y hacer un JOIN con la tabla customer mientras last_name y first_name de customer sea igual al de actors.
+    seleccionar de customer: customer_id, first_name, last_name y de actors: actor_id, first_name, last_name.
 */
+
+SELECT c.customer_id, c.first_name, c.last_name, a.actor_id, a.first_name, a.last_name FROM sakila.customer c RIGHT JOIN sakila.actor a ON (c.last_name = a.last_name AND c.first_name=a.first_name)
+
 /* 
-    Ej23
+    Ej35
+    USAR LEFT JOIN
+    Seleccionar todas las tuplas de la tabla customer y hacer un JOIN con la tabla actor mientras last_name y first_name de customer sea igual al de actors.
+    seleccionar de customer: customer_id, first_name, last_name y de actors: actor_id, first_name, last_name.
 */
+SELECT c.customer_id, c.first_name, c.last_name, a.actor_id, a.first_name, a.last_name FROM sakila.customer c LEFT JOIN sakila.actor a ON (c.last_name = a.last_name AND c.first_name=a.first_name)
+
 /* 
-    Ej23
+    Ej36
+    Consulta la tabla address de la base de datos sakila.
+    Realiza un INNER JOIN con las tablas city y country.
+    Mostrar las columnas address, city, country.
 */
+
+SELECT address.address, city.city, country.country FROM sakila.address  INNER JOIN sakila.city INNER JOIN sakila.country ON (address.city_id = city.city_id AND city.country_id=country.country_id);
+# OR
+SELECT  a.address, c.city, co.country FROM sakila.address a  INNER JOIN sakila.city c ON (a.city_id = c.city_id) INNER JOIN sakila.country co ON (c.country_id = co.country_id);
+
 /* 
-    Ej23
+    Ej37
+    Consulta la tabla customer de la base de datos sakila.
+    Realiza un LEFT JOIN con las tablas store y address.
+    Mostrar las columnas first_name como Nombre_cliente, address como Direccion, store_id como Id_tienda. Ordenarlo por Id_tienda.
 */
+
+SELECT c.first_name AS Nombre_cliente, a.address AS Direccion, s.store_id AS Id_tienda FROM sakila.customer c LEFT JOIN sakila.store s ON (c.store_id = s.store_id) LEFT JOIN sakila.address a ON(s.address_id = a.address_id) ORDER BY s.store_id;
+
 /* 
-    Ej23
+    Ej38
+    Consulta la tabla rental de la base de datos sakila.
+    Realiza un INNER JOIN con la tabla staff.
+    Mostrar las columnas rental_id, first_name.
+*/
+
+SELECT r.rental_id, s.first_name FROM sakila.rental r INNER JOIN sakila.staff s ON (r.staff_id = s.staff_id);
+
+/*COUNT, AVG, SUM, MAX, MIN
+    Ej39
 */
 /* 
     Ej23
@@ -290,6 +330,6 @@ SELECT * FROM sakila.film WHERE release_year = 2006 AND title LIKE 'ALI%';
     Ej23
 */
 
-virgin/* 
+/* 
     Ej23
 */
