@@ -496,26 +496,69 @@ SELECT payment_id, amount, CASE WHEN amount< 1 THEN 'Precio minimo' WHEN amount 
     Usa la función CASE en la tabla film y calcula 3 casos, si rental_rate es menor que 1 ingresa "Pelicula Mala", si la calificacion esta dentro de 1 y 3 que muestre "Pelicula Buena", si es mayor que muestre "Pelicula Excelente".
 */
 
+SELECT film_id, CASE WHEN rental_rate < 1 THEN 'Pelicula Mala' WHEN rental_rate BETWEEN 1 AND 3 THEN 'Pelicula Buena' ELSE 'Pelicula Exelente' END AS Comentario FROM sakila.film
 
+/*SUBQUERIES
+    Ej65
+    Seleccionar film_id, title de la tabla film de las peliculas que su primera letra sea K o Q, de las subqueries de las pelicuas que su language_id de la misma tabla sea el resultado de la subquierie de la tabla language donde name sea English.
+
+*/
+
+SELECT film_id, title FROM sakila.film WHERE title LIKE 'K%' OR title LIKE 'Q%'	AND title IN (SELECT title FROM sakila.film WHERE language_id IN (SELECT language_id FROM sakila.language WHERE name = 'English'));
 
 /* 
-    Ej46
+    Ej66
+    Seleccionar first_name, last_name de la tabla actor donde actor_id sea la subquerie de la misma tabla venga de la subqueriede film_id de la tabla film donde el title sea Alone Trip.
 */
+
+SELECT first_name, last_name FROM sakila.actor WHERE actor_id IN (SELECT actor_id FROM sakila.film_actor WHERE film_id IN (SELECT film_id FROM sakila.film WHERE title= 'Alone Trip'));
+
 /* 
-    Ej46
+    Ej67
+    Seleccionar film_id, title de la tabla film donde film_id sea la subquerie de la tabla film_category donde category_id sea la subquerie de la tabla category donde name='Family'
 */
+
+SELECT film_id, title FROM sakila.film WHERE film_id IN (SELECT film_id FROM sakila.film_category WHERE category_id IN (SELECT category_id FROM sakila.category WHERE name='Family'));
+
 /* 
-    Ej46
+    Ej68
+    Encuentre el nombre completo y la dirección de correo electrónico de todos los clientes que hayan alquilado una película de acción.
+    Todos los pagos que exceden el promedio para cada cliente junto con el recuento total de pagos que exceden el promedio.
 */
+# nombre, apellido, email de customer
+SELECT first_name, last_name, email FROM sakila.customer;
+# promedio que gasta cada cliente
+SELECT *, AVG(amount) AS PromedioGastado FROM sakila.payment GROUP BY customer_id;
+# las tuplas de rentas de peliculas de accion
+SELECT *  FROM sakila.payment WHERE (rental_id IN (SELECT rental_id FROM sakila.rental WHERE inventory_id IN (SELECT inventory_id FROM sakila.inventory WHERE film_id IN (SELECT film_id FROM sakila.film WHERE film_id IN(SELECT film_id FROM sakila.film_category WHERE category_id IN (SELECT category_id FROM sakila.category WHERE name = 'Action'))))));
+#ejercicio no terminado, no se como unir los 3.
 /* 
-    Ej46
+    Ej69
+    Crear una vista llamada ingresos_por_genero y seleccionar name, la suma de amount de la tabla category con un INNER JOIN de film_category donde category_id sea igual al de la tabla nueva.
+    Luego hacer un INNER JOIN con inventory donde film_id sea igual al de la tabla nueva. Luego hacer un INNER JOIN con la tabla rental y inventory_id sea igual al de la tabla nueva.Luego hacer un INNER JOIN con payment y que rental_id sea igual al de la tabla nueva.
+    Seleccionar a esa vista y luego borrarla.
 */
+CREATE VIEW ingresos_por_genero AS SELECT name, SUM(amount) FROM sakila.category INNER JOIN sakila.film_category ON category.category_id = film_category.category_id INNER JOIN sakila.inventory ON film_category.film_id = inventory.film_id INNER JOIN sakila.rental ON inventory.inventory_id = rental.inventory_id INNER JOIN sakila.payment ON rental.rental_id = payment.rental_id GROUP BY name ORDER BY SUM(amount) DESC LIMIT 5;
+
+SELECT * FROM ingresos_por_genero;
+
+DROP VIEW ingresos_por_genero;
+
 /* 
-    Ej46
+
+    Ej70
+    La vista "lista de clientes" proporciona una lista de clientes, con el nombre y el apellido concatenados
+    juntos y direcciones de información combinadas en una sola vista.
+    La vista "lista de clientes" incorpora datos de las tablas de clientes, direcciones, ciudades y países.
+    Seleccionarla y luego borrarla.
 */
-/* 
-    Ej46
-*/
+
+CREATE VIEW lista_de_clientes  AS SELECT c.customer_id, c.first_name, c.last_name, a.address, ci.city, co.country FROM sakila.customer c INNER JOIN sakila.address a ON c.address_id = a.address_id INNER JOIN sakila.city ci ON a.city_id = ci.city_id INNER JOIN sakila.country co ON ci.country_id = co.country_id  ;
+
+SELECT * FROM lista_de_clientes;
+
+DROP VIEW lista_de_clientes;
+
 /* 
     Ej46
 */
