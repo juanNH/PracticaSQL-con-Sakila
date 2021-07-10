@@ -559,34 +559,248 @@ SELECT * FROM lista_de_clientes;
 
 DROP VIEW lista_de_clientes;
 
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
-*/
-/* 
-    Ej46
+/*Consultas multitablas 
+    Ej71
+    Quien ha vendido mas del STAFF en Agosto del 2005.
 */
 
+SELECT s.first_name,s.last_name, SUM(amount) AS 'Total_amount' FROM sakila.staff s INNER JOIN sakila.payment p ON s.staff_id = p.staff_id AND p.payment_date LIKE '2005-08%'GROUP BY s.first_name;
+
+/*
+    Ej72
+    Hacer una lista de cada pelicula y el numero de actores que figuran en esa pelicula. Utilizar tablas film_actor y film.
+*/
+
+SELECT SUM(fa.actor_id) AS 'Numero_de_actores',f.title FROM sakila.film f INNER JOIN sakila.film_actor fa ON f.film_id = fa.film_id GROUP BY f.title;
+
+/*
+    Ej73
+    Cuantas copias de la pelicula Hunchback Impossible existen en el sistema de inventario
+*/
+
+SELECT f.title, COUNT(f.title) AS 'Existencias' FROM sakila.film f INNER JOIN sakila.inventory i ON f.film_id = i.film_id WHERE f.title = 'Hunchback Impossible';
+
+/*
+    Ej74
+   Anotar el total pagado por cada cliente. Listar los clientes alfabeticamente por apellido.
+*/
+
+SELECT c.first_name,c.last_name,SUM(p.amount) AS 'Total_gastado' FROM sakila.payment p INNER JOIN sakila.customer c ON (p.customer_id = c.customer_id) GROUP BY c.customer_id ORDER BY c.last_name;
+
+/*
+    Ej75
+    Encuentra DVD vencidos
+    Muchas tiendas de DVD producen una lista diaria de alquileres vencidos para que los clientes puedan ser contactados y se les pida que devuelvan sus DVD vencidos.  
+    Para crear una lista de este tipo, busque películas en la tabla de alquiler con una fecha de retorno NULA y donde la fecha de alquiler sea más antigua que la duración del alquiler especificada en la tabla de películas. Si es así, la película está atrasada y debemos producir el nombre de la película junto con el nombre del cliente y el email.
+*/
+
+SELECT c.first_name,c.email, f.title FROM sakila.rental r INNER JOIN sakila.customer c ON r.customer_id = c.customer_id INNER JOIN sakila.inventory i ON i.inventory_id = r.inventory_id INNER JOIN sakila.film f ON i.film_id = f.film_id WHERE r.return_date is null;
+
+/*INSERT
+    Ej76
+    Insertar en la tabla city una ciudad con cualquier nombre y del pais con id 100 y luego seleccionarla.
+*/
+INSERT INTO sakila.city (city, country_id) VALUES ('prueba',100);
+SELECT * FROM sakila.city WHERE city = 'prueba'; 
+/*
+    Ej77
+    Insertar en la tabla actor un actor con cualquier nombre y apellido y luego seleccionarla.
+*/
+
+INSERT INTO sakila.actor(first_name,last_name) VALUES('Pepe','Messi');
+SELECT * FROM sakila.actor WHERE last_name = 'MESSI';
+
+/*
+    Ej78
+    Insertar en la tabla category la categoria ciencia ficcion y luego seleccionarla.
+*/
+
+INSERT INTO sakila.category(name) VALUES('Ciencia ficcion');
+SELECT * FROM sakila.category WHERE name = 'Ciencia ficcion';
+
+/*
+    Ej79
+    Insertar en la tabla actor la categoria una persona cualquiera y luego seleccionarla.
+*/
+
+    INSERT INTO sakila.actor(first_name,last_name) VALUES('Pepe','Messi');
+    SELECT * FROM sakila.actor WHERE last_name = 'MESSI';
+
+/*
+    Ej80
+    Usa la función INSER INTO y agrega un registro a la tabla address y luego seleccionarla.
+*/
+
+INSERT INTO sakila.address (address,city_id) VALUES ('9 de julio',300);
+SELECT * FROM sakila.address WHERE address = '9 de julio';
+   
+/*
+    Ej81
+    Usa la función INSER INTO y agrega un registro a la tabla category y luego seleccionarla.
+*/
+
+INSERT INTO sakila.category (name) VALUES ('comedia');
+SELECT * FROM sakila.category WHERE name= 'comedia';
+
+/*
+    Ej82
+    Usa la función INSER INTO y agrega un registro a la tabla customer y luego seleccionarla. 
+*/
+
+INSERT INTO sakila.customer (store_id,first_name, last_name,address_id,active) VALUES (1,'pepe','romero',8,1);
+SELECT * FROM sakila.customer WHERE first_name = 'pepe' ;
+
+/*
+    Ej83
+    Usa la función INSER INTO y agrega un registro a la tabla film_text y luego seleccionarla.
+*/
+
+INSERT INTO sakila.film_text (title,description) VALUES ('ejemplo','ejemplo');
+SELECT * FROM sakila.film_text WHERE title = 'ejemplo';
+
+/*UPDATE
+    Ej84
+    Actualizar la columna city de la tabla city con id 87 a new york y luego mostrarlas.
+*/
+
+SELECT * FROM sakila.city WHERE country_id = 87;
+
+UPDATE sakila.city SET city= 'new york' WHERE country_id = 87;
+
+/*
+    Ej85
+    Actualizar las tuplas de la tabla actor y actualizar su first_name igual a RAUL solo si tienen last_name igual a GUINESS, luego mostrarlas.
+*/
+
+SELECT * FROM sakila.actor WHERE last_name= 'Guiness';
+
+UPDATE sakila.actor SET first_name= 'RAUL' WHERE last_name = 'GUINESS';
+
+/*
+    Ej86
+    Actualizar la tupla con staff_id igual a 2 su first_name a Pedro de la tabla staff y luego mostrarla.
+*/
+
+SELECT * FROM sakila.staff WHERE staff_id = 2;
+
+UPDATE sakila.staff SET first_name = 'Pedro' WHERE staff_id = 2;
+
+/*
+    Ej87
+    Usa la función UPDATE y actualiza un registro a la tabla actor.
+*/
+
+SELECT * FROM sakila.actor WHERE actor_id = 2;
+
+UPDATE sakila.actor SET last_name = 'Messi' WHERE actor_id = 2;
+
+/*
+    Ej88
+    Usa la función UPDATE y actualiza un registro a la tabla address.
+*/
+
+SELECT * FROM sakila.address WHERE address_id = 2;
+
+UPDATE sakila.address SET  address = '123 Falsa' WHERE address_id = 2;
+
+/*
+    Ej89
+    Usa la función UPDATE y actualiza un registro a la tabla category.
+*/
+
+SELECT * FROM sakila.category WHERE name = 'super action';
+
+UPDATE sakila.category SET  name = 'super action' WHERE name = 'action';
+
+/*
+    Ej90
+    Usa la función UPDATE y actualiza un registro a la tabla customer.
+*/
+
+SELECT * FROM sakila.customer WHERE first_name = 'Paty';
+
+UPDATE sakila.customer SET  name = 'Paty' WHERE name = 'Mary';
+
+/*
+    Ej91
+    Usa la función UPDATE y agrega un registro a la tabla film_text.
+*/
+
+SELECT * FROM sakila.film_text WHERE title LIKE 'be%';
+
+UPDATE sakila.film_text SET  description = 'muy buena peli' WHERE name LIKE'be%';
+
+/*ALTER TABLE
+    Ej92
+    Crear una columna que se llame genero_actor y que solo se pueda ingresar 1 letra de la tabla actor y luego borrar la tabla.
+*/
+
+ALTER TABLE sakila.actor ADD COLUMN genero_actor CHAR(1);
+
+ALTER TABLE actor DROP COLUMN genero_actor;
+
+/*
+    Ej93
+    Crear la tabla del item anterior, cambiarle el genero a 3 actores y luego seleccionarlos.
+*/
+
+ALTER TABLE sakila.actor ADD COLUMN genero_actor CHAR(1);
+
+UPDATE sakila.actor SET genero_actor = 'M' WHERE actor_id =1;
+
+UPDATE sakila.actor SET genero_actor = 'M' WHERE actor_id =2;
+
+UPDATE sakila.actor SET genero_actor = 'F' WHERE actor_id =3;
+
+SELECT * FROM sakila.actor WHERE actor_id NOT NULL;
+
+/*
+    Ej94
+    Usa la función ALTER TABLE  y agrega la columna categoria a la tabla film_text, llena la columna de los primeros 10 film_id.
+    Luego seleccionarla.
+*/
+
+ALTER TABLE sakila.film_text ADD COLUMN Categoria CHAR(1);
+
+UPDATE sakila.film_text SET categoria = 'B' WHERE film_id < 11;
+
+SELECT * FROM sakila.film_text;
+
+/*COMPLEMENTARIOS
+    Ej95
+    ¿Qué actores tienen el primer nombre 'Scarlett'?
+*/
+SELECT * FROM sakila.actor WHERE first_name = 'Scarlett'
+/*
+    Ej96
+    ¿Qué actores tienen el apellido "Johansson"?
+*/
+
+SELECT * FROM sakila.actor WHERE last_name = 'Johansson'
+
+/*
+    Ej97
+    ¿Cuántos apellidos de actores distintos hay?
+*/
+
+SELECT COUNT(DISTINCT(last_name)) FROM sakila.actor;
+
+/*
+    Ej98
+    ¿Qué apellidos no se repiten?
+*/
+
+SELECT last_name FROM sakila.actor GROUP BY last_name HAVING COUNT(last_name) = 1;
+/*
+    Ej99
+    ¿Qué actor ha aparecido en la mayoría de las películas?
+*/
+
+SELECT a.actor_id,a.first_name, a.last_name, COUNT(f.actor_id) AS Contador FROM sakila.actor a INNER JOIN sakila.film_actor f ON (a.actor_id = f.actor_id) GROUP BY f.actor_id ORDER BY Contador DESC LIMIT 1;
+
+/*
+    Ej100
+    ¿Se puede alquilar ‘Academy Dinosaur’ en la tienda 1?
+*/
+
+SELECT * FROM sakila.inventory i INNER JOIN sakila.film f ON (f.film_id = i.film_id) WHERE title ='Academy Dinosaur' AND i.store_id = 1;
